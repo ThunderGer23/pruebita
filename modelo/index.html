@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
+    <!--importando libreria de jsavascript-->
+</head>
+
+<body>
+
+    <DIV class="container">
+        <h1>PAGINA PARA RN </h1>
+    </DIV>
+
+</body>
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@2.0.0/dist/tf.min.js"></script>
+<script type="text/javascript">
+    var modelo = null;
+    (async() => {
+        const model = await tf.loadGraphModel('model.json');
+        console.log("Cargando modelo ...");
+        const modelo = await tf.loadLayersModel('model.json');
+        console.log("modelo cargado lml");
+    })();
+</script>
+
+</html>
