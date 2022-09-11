@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
+    <!--importando libreria de jsavascript-->
+
+</head>
+
+<body>
+
+    <DIV class="container">
+        <div class="row">
+            <h1>PAGINA PARA DETECTAR FRASES DE SPAM </h1>
+        </div>
+        <div class="row">
+            <h2> Escribe el texto a analizar (en inglés)...</h2>
+        </div>
+        <div class="input-group">
+            <input type="text" class="form-control" id="textoParaRedNeuronal">
+            <div class="input-group-append">
+                <button class="btn btn-outline-secondary" type="button" onclick="Spam()">Enviar</button>
+            </div>
+        </div>
+        <div>
+            <label class="form-label"><h2>Resultado: </h2> </label>
+            <div id="resultado">
+                spam?
+            </div>
+
+        </div>
+    </DIV>
+
+</body>
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@3.20.0/dist/tf.min.js"></script>
+<script type="text/javascript">
+    //se indica donde esta el archivo json y se carga en una variable el modelo 
+    //
+    var modelo = null;
+    const cargandoModelo = (modelo) => {
+            try {
+                console.log("Cargando modelo ...");
+                const modelo = tf.loadLayersModel('model.json');
+                //console.log(modelo);
+                return new Promise((resolve, reject) => {
+                    resolve(modelo);
+                })
+            } catch (modelo) {
+                if (modelo == null) {
+                    console.log("FALLO AL CARGAR EL MODELO ASYNC ");
+                }
+            }
+
+        }
+        //cargandoModelo().then((modelo) => console.log(modelo));
+
+    async function Spam() {
+        console.log("entre a la funciion spam");
+        const textInput = textoParaRedNeuronal.value;
+        const modeloRN = await cargandoModelo();
+        //checando que el modelo ya este incializado 
+        if (modeloRN != null) {
+            console.log("entre a la funcion para el modelo");
+            console.log(modeloRN);
+            //para hacer predicciones tensorflow
+            //requiere como entrada un tensor 
+            const String2tensor = tfjs.constant([textInput]);
+            console.log("pase la declaracion del tensor");
+            console.log("tamaño del tensor ");
+            console.log(String2tensor);
+            //realizando la prediccion, se agrega la sentencia datasync para que 
+            //se realice la prediccion antes de continuar con las demas sentencias
+            var prediccion = cargandoModelo().then((modelo) => modelo.predict(String2tensor).dataSync());
+            //var prediccion = modeloRN.predict(tensor).dataSync();
+            console.log("pase de la prediccion");
+            const calculoRound = Math.round(prediccion) * 100;
+            console.log("pase el calculo");
+            console.log(calculoRound);
+            document.getElementById("resultado").innerHTML = "El texto ingresado tiene " + calculoRound + "% de probabilidad en ser Spam";
+            console.log("despues de escribir en la web");
+        } else {
+            console.log("ERROR, al cargar modelo");
+        }
+    }
+</script>
+
+</html>
